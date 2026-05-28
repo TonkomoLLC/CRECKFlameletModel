@@ -35,7 +35,8 @@ SourceFiles
 #ifndef flameletThermo_H
 #define flameletThermo_H
 
-#include "fluidThermo.H"
+#include "psiThermo.H"
+#include "physicalProperties.H"
 #include "runTimeSelectionTables.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -47,21 +48,15 @@ namespace Foam
                        Class flameletThermo Declaration
 \*---------------------------------------------------------------------------*/
 
+template<class BasicFlameletThermo, class MixtureType>
+class pdfFlameletThermo;
+
 class flameletThermo
 :
-    public fluidThermo
+    public psiThermo::composite
 {
 
 protected:
-
-    // Protected data
-
-        //- Compressibility [s^2/m^2]
-        volScalarField psi_;
-
-        //- Dynamic viscosity [kg/m/s]
-        volScalarField mu_;
-
 
     // Protected Member Functions
 
@@ -73,6 +68,26 @@ public:
 
     //- Runtime type information
     TypeName("flameletThermo");
+
+
+    //- Composite base used by OF13 makeThermo.
+    //  Defined after flameletThermo is complete; C++ cannot derive a
+    //  nested class from its enclosing class before the enclosing class
+    //  is complete.
+    class composite;
+
+
+    //- Derived thermo type used by OF13 makeThermo.
+    template<class MixtureType>
+    using DerivedThermoType = pdfFlameletThermo
+    <
+        PsiThermo<BasicThermo<MixtureType, composite>>,
+        MixtureType
+    >;
+
+
+    //- Derived thermo package name used by OF13 makeThermo.
+    static word derivedThermoName();
 
 
     //- Declare run-time constructor selection table
@@ -164,10 +179,46 @@ public:
         // Access to transport state variables
 
             //- Dynamic viscosity of mixture [kg/m/s]
-            virtual tmp<volScalarField> mu() const;
+            virtual const volScalarField& mu() const;
 
             //- Dynamic viscosity of mixture for patch [kg/m/s]
             virtual tmp<scalarField> mu(const label patchi) const;
+};
+
+
+/*---------------------------------------------------------------------------*\
+                    Class flameletThermo::composite Declaration
+\*---------------------------------------------------------------------------*/
+
+class flameletThermo::composite
+:
+    public flameletThermo
+{
+public:
+
+    //- Construct from dictionary, mesh and phase name
+    composite
+    (
+        const dictionary&,
+        const fvMesh& mesh,
+        const word& phaseName
+    )
+    :
+        flameletThermo(mesh, phaseName)
+    {}
+
+    //- Construct from dictionary, mixture, mesh and phase name
+    template<class MixtureType>
+    composite
+    (
+        const dictionary&,
+        const MixtureType&,
+        const fvMesh& mesh,
+        const word& phaseName
+    )
+    :
+        flameletThermo(mesh, phaseName)
+    {}
 };
 
 

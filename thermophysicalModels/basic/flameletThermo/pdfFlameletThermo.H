@@ -36,7 +36,6 @@ SourceFiles
 #define pdfFlameletThermo_H
 
 #include "flameletThermo.H"
-#include "heThermo.H"
 #include "OpenSMOKE_PDF_NonAdiabaticFlamelet_Library.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -51,7 +50,7 @@ namespace Foam
 template<class BasicPsiThermo, class MixtureType>
 class pdfFlameletThermo
 :
-    public heThermo<BasicPsiThermo, MixtureType>
+    public BasicPsiThermo
 {
     // Private Member Functions
 
@@ -79,10 +78,6 @@ class pdfFlameletThermo
 
 
 public:
-
-    //- Runtime type information
-    TypeName("pdfFlameletThermo");
-
 
     // Constructors
 

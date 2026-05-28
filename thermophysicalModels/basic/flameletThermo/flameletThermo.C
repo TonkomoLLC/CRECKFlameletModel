@@ -30,6 +30,11 @@ License
 namespace Foam
 {
     defineTypeNameAndDebug(flameletThermo, 0);
+
+Foam::word Foam::flameletThermo::derivedThermoName()
+{
+    return typeName;
+}
     defineRunTimeSelectionTable(flameletThermo, fvMesh);
 }
 
@@ -38,34 +43,11 @@ namespace Foam
 
 Foam::flameletThermo::flameletThermo(const fvMesh& mesh, const word& phaseName)
 :
-    fluidThermo(mesh, phaseName),
-
-    psi_
+    psiThermo::composite
     (
-        IOobject
-        (
-            phasePropertyName("thermo:psi"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
+        IOdictionary(physicalProperties::findModelDict(mesh, phaseName)),
         mesh,
-        dimensionSet(0, -2, 2, 0, 0)
-    ),
-
-    mu_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:mu"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimensionSet(1, -1, -1, 0, 0)
+        phaseName
     )
 {}
 
@@ -182,7 +164,7 @@ const Foam::volScalarField& Foam::flameletThermo::psi() const
 }
 
 
-Foam::tmp<Foam::volScalarField> Foam::flameletThermo::mu() const
+const Foam::volScalarField& Foam::flameletThermo::mu() const
 {
     return mu_;
 }

@@ -49,6 +49,10 @@ laplacianSchemes
 
     laplacian((rho*DepsilonEff),epsilon)    Gauss linear corrected;
     laplacian((rho*DkEff),k)                Gauss linear corrected;
+    laplacian(((rho*nuEff)|sigmat),Z)        Gauss linear corrected;
+    laplacian(((rho*nuEff)|sigmat),H)     Gauss linear corrected;
+    laplacian(interpolate((rho*nuEff)),U)    Gauss linear corrected;
+
 }
 
 interpolationSchemes

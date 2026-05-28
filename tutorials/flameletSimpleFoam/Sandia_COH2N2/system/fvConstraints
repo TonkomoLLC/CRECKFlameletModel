@@ -11,43 +11,22 @@ FoamFile
     format      ascii;
     class       dictionary;
     location    "system";
-    object      controlDict;
+    object      fvConstraints;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+/*
+rhoLimits
+{
+    type    limitMag;
+    cellZone all;
+    field   rho;
+    min     0.5;
+    max     1.5;
+}
+*/
 
-application     flameletSimpleFoam;
-
-solver          SLFMFluid;
-
-startFrom       latestTime;
-
-startTime       0;
-
-stopAt          endTime;
-
-endTime         2000;
-
-deltaT          1;
-
-writeControl    timeStep;
-
-writeInterval   500;
-
-purgeWrite      0;
-
-writeFormat     binary;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-graphFormat     raw;
-
-runTimeModifiable true;
-
-
-// ************************************************************************* //
+limitp
+{
+    type    limitPressure;
+    min     10000;
+}

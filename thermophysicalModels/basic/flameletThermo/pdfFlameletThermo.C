@@ -44,13 +44,13 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
     const scalarField& alphaFavre = this->alpha_favre_.internalField();
 
-    scalarField& psiCells = this->psi_.ref();
+    scalarField& psiCells = this->psi_.primitiveFieldRef();
 
-    scalarField& muCells = this->mu_.ref();
+    scalarField& muCells = this->mu_.primitiveFieldRef();
 
-    scalarField& alphaCells = this->alpha_.ref();
+    scalarField& kappaCells = this->kappa_.primitiveFieldRef();
 
-    scalarField& defectCells = this->defect_.ref();
+    scalarField& defectCells = this->defect_.primitiveFieldRef();
 
     forAll(ZCells, celli)
     {
@@ -58,7 +58,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
         muCells[celli] = muFavre[celli];
 
-        alphaCells[celli] = alphaFavre[celli];
+        kappaCells[celli] = alphaFavre[celli];
 
         defectCells[celli] = 
             HCells[celli] - (HOxidizer+ZCells[celli]*(HFuel-HOxidizer));
@@ -90,7 +90,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
         fvPatchScalarField& pmu = this->mu_.boundaryFieldRef()[patchi];
 
-        fvPatchScalarField& palpha = this->alpha_.boundaryFieldRef()[patchi];
+        fvPatchScalarField& pkappa = this->kappa_.boundaryFieldRef()[patchi];
 
 
         if (pT.fixesValue())
@@ -101,7 +101,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
                 pmu[facei] = pmuFavre[facei];
 
-                palpha[facei] = palphaFavre[facei];
+                pkappa[facei] = palphaFavre[facei];
 
                 pdefect[facei]
                     = pH[facei] - (HOxidizer+pZ[facei]*(HFuel-HOxidizer));
@@ -116,7 +116,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
                 pmu[facei] = pmuFavre[facei];
 
-                palpha[facei] = palphaFavre[facei];
+                pkappa[facei] = palphaFavre[facei];
 
                 pdefect[facei]
                     = pH[facei] - (HOxidizer+pZ[facei]*(HFuel-HOxidizer));
@@ -143,15 +143,15 @@ void Foam::pdfFlameletThermo<BasicFlameletThermo, MixtureType>::update()
 
     const scalarField& HCells = this->H_.internalField();
 
-    scalarField& TCells = this->T_.ref();
+    scalarField& TCells = this->T_.primitiveFieldRef();
 
-    scalarField& RhoCells = this->density_reynolds_.ref();
+    scalarField& RhoCells = this->density_reynolds_.primitiveFieldRef();
 
-    scalarField& asCells = this->as_.ref();
+    scalarField& asCells = this->as_.primitiveFieldRef();
 
-    scalarField& muCells = this->mu_favre_.ref();
+    scalarField& muCells = this->mu_favre_.primitiveFieldRef();
     
-    scalarField& alphaCells = this->alpha_favre_.ref();
+    scalarField& alphaCells = this->alpha_favre_.primitiveFieldRef();
 
     scalar small_eps = 1.e-6;
 
@@ -887,7 +887,7 @@ updateMassFractions()
         {
             if(j<flamelets_library.number_of_species())
             {
-                omega_[j].ref()[celli] = extracted[j+1];
+                omega_[j].primitiveFieldRef()[celli] = extracted[j+1];
             }
         }
     }
@@ -1023,14 +1023,18 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
     const word& phaseName
 )
 :
-    heThermo<BasicPsiThermo, MixtureType>(mesh, phaseName),
+    BasicPsiThermo
+    (
+        mesh,
+        phaseName
+    ),
 
     Z_
     (
         IOobject
         (
             "Z",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::MUST_READ,
             IOobject::AUTO_WRITE
@@ -1043,7 +1047,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "Zvar",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::MUST_READ,
             IOobject::AUTO_WRITE
@@ -1056,7 +1060,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "chi_st",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::NO_READ,
             IOobject::AUTO_WRITE
@@ -1070,7 +1074,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "H",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::MUST_READ,
             IOobject::AUTO_WRITE
@@ -1083,7 +1087,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "defect",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::NO_READ,
             IOobject::AUTO_WRITE
@@ -1097,7 +1101,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "as",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::NO_READ,
             IOobject::AUTO_WRITE
@@ -1111,7 +1115,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "rho_reynolds",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::NO_READ,
             IOobject::NO_WRITE
@@ -1125,7 +1129,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "mu_lam",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::NO_READ,
             IOobject::AUTO_WRITE
@@ -1139,7 +1143,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
         IOobject
         (
             "alpha_lam",
-            mesh.time().timeName(),
+            mesh.time().name(),
             mesh,
             IOobject::NO_READ,
             IOobject::AUTO_WRITE
@@ -1338,7 +1342,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::pdfFlameletThermo
                         IOobject
                         (
                             name_of_species,
-                            mesh.time().timeName(),
+                            mesh.time().name(),
                             mesh,
                             IOobject::NO_READ,
                             IOobject::AUTO_WRITE
@@ -1395,7 +1399,7 @@ Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::~pdfFlameletThermo()
 template<class BasicPsiThermo, class MixtureType>
 void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::correct()
 {
-    if (debug)
+    if (flameletThermo::debug)
     {
         InfoInFunction << endl;
     }
@@ -1441,7 +1445,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::correct()
     ++counter;
     ++counter_mass_fractions;
 
-    if (debug)
+    if (flameletThermo::debug)
     {
         Info<< "    Finished" << endl;
     }

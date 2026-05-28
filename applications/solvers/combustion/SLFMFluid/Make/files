@@ -1,0 +1,3 @@
+SLFMFluid.C
+
+LIB = $(FOAM_USER_LIBBIN)/libSLFMFluid
