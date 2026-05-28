@@ -2,7 +2,7 @@
 fvScalarMatrix ZEqn
 (
     fvm::div(phi, Z)
-  - fvm::laplacian(turbulence->muEff()/sigmat, Z)
+  - fvm::laplacian(rho*turbulence->nuEff()/sigmat, Z)
 );
 
 ZEqn.relax();
@@ -16,8 +16,8 @@ if (varianceEquation == false)
     (
     	(
     	    fvm::div(phi, Zvar)
-    	  - fvm::laplacian(turbulence->mut()/sigmat, Zvar)
-    	  - Cg*turbulence->mut()*magSqr(fvc::grad(Z))
+    	  - fvm::laplacian(rho*turbulence->nut()/sigmat, Zvar)
+    	  - Cg*rho*turbulence->nut()*magSqr(fvc::grad(Z))
     	  + Cd*rho*turbulence->epsilon()/(turbulence->k()+k_small)*Zvar
     	)
     );
@@ -33,7 +33,7 @@ else
     scalarField& ZvarCells = Zvar.ref();
 
     ZvarCells =
-        Cg*turbulence->mut()*magSqr(fvc::grad(Z))*turbulence->k()
+        Cg*rho*turbulence->nut()*magSqr(fvc::grad(Z))*turbulence->k()
       / (Cd*rho*(turbulence->epsilon()+epsilon_small));
 }
 

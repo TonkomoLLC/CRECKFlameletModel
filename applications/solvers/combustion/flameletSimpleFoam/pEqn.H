@@ -24,7 +24,7 @@
                 fvm::div(phid, p)
               - fvm::laplacian(rhorAUf, p)
               ==
-                fvOptions(psi, p, rho.name())
+                fvModels.source(psi, p, rho.name())
             );
 
             // Relax the pressure equation to ensure diagonal-dominance
@@ -36,7 +36,7 @@
 
             if (simple.finalNonOrthogonalIter())
             {
-                phi == pEqn.flux();
+                phi = pEqn.flux();
             }
         }
     }
@@ -57,7 +57,7 @@
                 fvc::div(phiHbyA)
               - fvm::laplacian(rhorAUf, p)
               ==
-                fvOptions(psi, p, rho.name())
+                fvModels.source(psi, p, rho.name())
             );
 
             pEqn.setReference(pRefCell, pRefValue);
@@ -79,7 +79,7 @@
 
     U = HbyA - rAU*fvc::grad(p);
     U.correctBoundaryConditions();
-    fvOptions.correct(U);
+    fvConstraints.constrain(U);
 
     // For closed-volume cases adjust the pressure and density levels
     // to obey overall mass continuity

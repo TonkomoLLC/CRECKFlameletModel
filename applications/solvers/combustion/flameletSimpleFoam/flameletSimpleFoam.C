@@ -32,10 +32,11 @@ Description
 
 #include "fvCFD.H"
 #include "flameletThermo.H"
-#include "fluidThermoMomentumTransportModel.H"
+#include "compressibleMomentumTransportModel.H"
 #include "fluidThermophysicalTransportModel.H"
 #include "simpleControl.H"
-#include "fvOptions.H"
+#include "fvModels.H"
+#include "fvConstraints.H"
 #include "OFstream.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -51,7 +52,8 @@ int main(int argc, char *argv[])
     #include "createFields.H"
     #include "createFieldRefs.H"
     #include "readMassFlowProperties.H"
-    #include "createFvOptions.H"
+    #include "createFvModels.H"
+    #include "createFvConstraints.H"
     #include "initContinuityErrs.H"
 
     turbulence->validate();

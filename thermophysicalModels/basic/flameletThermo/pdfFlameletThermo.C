@@ -48,7 +48,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
     scalarField& muCells = this->mu_.ref();
 
-    scalarField& alphaCells = this->alpha_.ref();
+    scalarField& kappaCells = this->kappa_.ref();
 
     scalarField& defectCells = this->defect_.ref();
 
@@ -58,7 +58,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
         muCells[celli] = muFavre[celli];
 
-        alphaCells[celli] = alphaFavre[celli];
+        kappaCells[celli] = alphaFavre[celli];
 
         defectCells[celli] = 
             HCells[celli] - (HOxidizer+ZCells[celli]*(HFuel-HOxidizer));
@@ -90,7 +90,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
         fvPatchScalarField& pmu = this->mu_.boundaryFieldRef()[patchi];
 
-        fvPatchScalarField& palpha = this->alpha_.boundaryFieldRef()[patchi];
+        fvPatchScalarField& pkappa = this->kappa_.boundaryFieldRef()[patchi];
 
 
         if (pT.fixesValue())
@@ -101,7 +101,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
                 pmu[facei] = pmuFavre[facei];
 
-                palpha[facei] = palphaFavre[facei];
+                pkappa[facei] = palphaFavre[facei];
 
                 pdefect[facei]
                     = pH[facei] - (HOxidizer+pZ[facei]*(HFuel-HOxidizer));
@@ -116,7 +116,7 @@ void Foam::pdfFlameletThermo<BasicPsiThermo, MixtureType>::calculate()
 
                 pmu[facei] = pmuFavre[facei];
 
-                palpha[facei] = palphaFavre[facei];
+                pkappa[facei] = palphaFavre[facei];
 
                 pdefect[facei]
                     = pH[facei] - (HOxidizer+pZ[facei]*(HFuel-HOxidizer));

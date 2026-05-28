@@ -4,7 +4,7 @@
     	fvScalarMatrix hEqn
     	(
     		fvm::div(phi, H)
-          - fvm::laplacian(turbulence->muEff()/sigmat, H)
+          - fvm::laplacian(rho*turbulence->nuEff()/sigmat, H)
     	);
 
     	hEqn.relax();
@@ -27,7 +27,7 @@
     	fvScalarMatrix hEqn
     	(
     		fvm::div(phi, H)
-          - fvm::laplacian(turbulence->muEff()/sigmat, H) + Qrad
+          - fvm::laplacian(rho*turbulence->nuEff()/sigmat, H) + Qrad
     	);
 
     	hEqn.relax();

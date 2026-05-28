@@ -38,35 +38,7 @@ namespace Foam
 
 Foam::flameletThermo::flameletThermo(const fvMesh& mesh, const word& phaseName)
 :
-    fluidThermo(mesh, phaseName),
-
-    psi_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:psi"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimensionSet(0, -2, 2, 0, 0)
-    ),
-
-    mu_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:mu"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimensionSet(1, -1, -1, 0, 0)
-    )
+    psiThermo::composite(mesh, phaseName)
 {}
 
 

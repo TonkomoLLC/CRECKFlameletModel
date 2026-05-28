@@ -34,7 +34,7 @@ if (simple.transonic())
           + fvc::div(phic)
           - fvm::laplacian(rhorAtU, p)
          ==
-            fvOptions(psi, p, rho.name())
+            fvModels.source(psi, p, rho.name())
         );
 
         // Relax the pressure equation to maintain diagonal dominance
@@ -46,7 +46,7 @@ if (simple.transonic())
 
         if (simple.finalNonOrthogonalIter())
         {
-            phi == phic + pEqn.flux();
+            phi = phic + pEqn.flux();
         }
     }
 }
@@ -72,7 +72,7 @@ else
             fvc::div(phiHbyA)
           - fvm::laplacian(rhorAtU, p)
           ==
-            fvOptions(psi, p, rho.name())
+            fvModels.source(psi, p, rho.name())
         );
 
         pEqn.setReference(pRefCell, pRefValue);
@@ -95,7 +95,7 @@ p.relax();
 
 U = HbyA - rAtU*fvc::grad(p);
 U.correctBoundaryConditions();
-fvOptions.correct(U);
+fvConstraints.constrain(U);
 
 // For closed-volume cases adjust the pressure and density levels
 // to obey overall mass continuity

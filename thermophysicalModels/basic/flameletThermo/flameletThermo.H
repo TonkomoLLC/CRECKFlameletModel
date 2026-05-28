@@ -35,7 +35,7 @@ SourceFiles
 #ifndef flameletThermo_H
 #define flameletThermo_H
 
-#include "fluidThermo.H"
+#include "psiThermo.H"
 #include "runTimeSelectionTables.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -49,19 +49,10 @@ namespace Foam
 
 class flameletThermo
 :
-    public fluidThermo
+    public psiThermo::composite
 {
 
 protected:
-
-    // Protected data
-
-        //- Compressibility [s^2/m^2]
-        volScalarField psi_;
-
-        //- Dynamic viscosity [kg/m/s]
-        volScalarField mu_;
-
 
     // Protected Member Functions
 
@@ -73,6 +64,14 @@ public:
 
     //- Runtime type information
     TypeName("flameletThermo");
+
+
+    //- Composite implementation used by OpenFOAM-10 thermo
+    //  registration macros.  This makes generated types of the
+    //  form pdfFlameletThermo<flameletThermo::composite, Mixture>
+    //  derive from flameletThermo, so autoPtr<flameletThermo> can
+    //  be constructed by the run-time selection table.
+    class composite;
 
 
     //- Declare run-time constructor selection table
@@ -168,6 +167,28 @@ public:
 
             //- Dynamic viscosity of mixture for patch [kg/m/s]
             virtual tmp<scalarField> mu(const label patchi) const;
+};
+
+
+/*---------------------------------------------------------------------------*\
+                    Class flameletThermo::composite Declaration
+\*---------------------------------------------------------------------------*/
+
+class flameletThermo::composite
+:
+    public flameletThermo
+{
+public:
+
+    //- Construct from mesh and phase name
+    composite
+    (
+        const fvMesh& mesh,
+        const word& phaseName
+    )
+    :
+        flameletThermo(mesh, phaseName)
+    {}
 };
 
 
