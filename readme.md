@@ -3,6 +3,8 @@
 The libraries you are using here are developed by Alberto Cuoci and his team (CRECK Modeling group). For more information have a look at the official website http://creckmodeling.chem.polimi.it/
 
 ## Supported OpenFOAM versions
+ - OpenFOAM v13 (Tonkomo GitHub)
+ - OpenFOAM v10 (Tonkomo GitHub)
  - OpenFOAM v8
  - OpenFOAM v7
  - OpenFOAM 4.x
