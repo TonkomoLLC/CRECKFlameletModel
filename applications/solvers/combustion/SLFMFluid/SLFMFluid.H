@@ -12,7 +12,7 @@ Class
     Foam::solvers::SLFMFluid
 
 Description
-    Runtime-selectable foamRun SLFM module built on the OpenFOAM-13
+    Runtime-selectable foamRun SLFM module built on the OpenFOAM-14
     isothermalFluid solver infrastructure.
 
 \*---------------------------------------------------------------------------*/

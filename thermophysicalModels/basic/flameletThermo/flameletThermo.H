@@ -70,14 +70,14 @@ public:
     TypeName("flameletThermo");
 
 
-    //- Composite base used by OF13 makeThermo.
+    //- Composite base used by OF14 makeFluidThermo.
     //  Defined after flameletThermo is complete; C++ cannot derive a
     //  nested class from its enclosing class before the enclosing class
     //  is complete.
     class composite;
 
 
-    //- Derived thermo type used by OF13 makeThermo.
+    //- Derived thermo type used by OF14 makeFluidThermo.
     template<class MixtureType>
     using DerivedThermoType = pdfFlameletThermo
     <
@@ -86,7 +86,7 @@ public:
     >;
 
 
-    //- Derived thermo package name used by OF13 makeThermo.
+    //- Derived thermo package name used by OF14 makeFluidThermo.
     static word derivedThermoName();
 
 

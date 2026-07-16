@@ -1,29 +1,47 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  dev                                   |
+|  \\    /   O peration     | Version:  14                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version     2.0;
+    version     2.2;
     format      ascii;
     class       dictionary;
     location    "constant";
-    object      turbulenceProperties;
+    object      physicalProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-simulationType  RAS;
-
-RAS
+thermoType
 {
-    RASModel        kEpsilon;
+    type            flameletThermo;
+    mixture         pureMixture;
+    transport       sutherland;
+    thermo          hConst;
+    equationOfState perfectGas;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
 
-    turbulence      on;
-
-    printCoeffs     on;
+mixture
+{
+    specie
+    {
+        molWeight   28.9;
+    }
+    thermodynamics
+    {
+        Cp          1005;
+        hf          0;
+    }
+    transport
+    {
+        As          1.4792e-06;
+        Ts          116;
+    }
 }
 
 

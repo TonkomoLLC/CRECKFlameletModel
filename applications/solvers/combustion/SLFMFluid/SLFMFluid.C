@@ -134,7 +134,7 @@ Foam::solvers::SLFMFluid::SLFMFluid(fvMesh& mesh)
     flameletThermo_.validate(type(), "h", "e");
 
     // The base class already created rho, U, phi, p, MRF, pressure reference,
-    // and the compressible momentum-transport model in the OF13-native order.
+    // and the compressible momentum-transport model in the OF14-native order.
     mesh.schemes().setFluxRequired(Z_.name());
     mesh.schemes().setFluxRequired(Zvar_.name());
     mesh.schemes().setFluxRequired(H_.name());

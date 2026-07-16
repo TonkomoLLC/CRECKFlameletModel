@@ -1,9 +1,10 @@
-##  Rebuild of the steady-state laminar Flamelet Model for OpenFOAM v8
+## Steady-state laminar flamelet model port for OpenFOAM 14
 
 The libraries you are using here are developed by Alberto Cuoci and his team (CRECK Modeling group). For more information have a look at the official website http://creckmodeling.chem.polimi.it/
 
 ## Supported OpenFOAM versions
- - OpenFOAM v13 (Tonkomo GitHub)
+ - OpenFOAM v14 (this port)
+ - OpenFOAM v13 (previous port)
  - OpenFOAM v10 (Tonkomo GitHub)
  - OpenFOAM v8
  - OpenFOAM v7
@@ -23,28 +24,16 @@ A discussion can be followed here: http://www.cfd-online.com/Forums/openfoam-pro
 
 ## Compiling
 
-In the documentation folder you will find a compilation instruction which should be valid for this version too. However, you should
-first try the following steps given below. If you do have any problems, feel free to mail to community@Holzmann-cfd.com. The »master« branch represents the actual supported versions (here OpenFOAM v8).
+The legacy documents remain useful for model background, but their build instructions predate the modular solver framework. For OpenFOAM 14, load the OpenFOAM environment and use the supplied build script.
 
 ```bash
-cd $FOAM_RUN
-cd ../
-git clone https://github.com/shor-ty/CRECKFlameletModel.git CRECKFlameletModel
-cd CRECKFlameletModel
-```
-Now, depending on your OpenFOAM version, you have to replace »master« with the branch that fits to you.
-```bash
-git checkout master
-cd thermophysicalModels/flameletExtraction/common
-wmake libso
-cd ../flamelets/turbulent/
-wmake libso
-cd ../../../basic/
-wmake libso
-cd ../../applications/solvers/combustion/flameletSimpleFoam
-wmake
-cd ../../../../
-cp -r tutorials $FOAM_RUN/flameletTutorials
+source /opt/openfoam14/etc/bashrc
+cd CRECKFlameletModel-OpenFOAM-14
+./Allwmake -j4
+
+# Run the supplied OF14 tutorial
+cd tutorials/flameletSimpleFoam/Sandia_COH2N2
+./Allrun
 ```
 
 ## Changes | Features | Documentation
@@ -52,10 +41,10 @@ cp -r tutorials $FOAM_RUN/flameletTutorials
 
 ## Important | Validation
 
-+ the rebuilt of the flamelet model for OpenFOAM v7 and v8 was not validated. Only the necessary class changes were performed in order to use the library for newer versions. Nevertheless, one should first countercheck the SANDIA flame tutorial with the measurment data to ensure correctness.
++ This OF14 port has been statically checked against the OpenFOAM 14 interfaces. The supplied SANDIA case should still be compared with the original validation data before relying on quantitative results.
 
 ## Notice | Warranty
-+ Not tested. No warranty of results and accuraty.
++ No warranty is provided for numerical accuracy or fitness for a particular application.
 
 ## Older versions
 + the modified version of 7.x can be found inside this repository

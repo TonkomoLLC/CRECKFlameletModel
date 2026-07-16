@@ -1,6 +1,2 @@
-OF13 patch note:
-- Removed TypeName("pdfFlameletThermo") from the templated implementation class.
-  The final concrete thermo type is registered by makeThermo/NamedThermo in flameletThermos.C.
-  Leaving TypeName in the template declares per-instantiation static typeName/debug members
-  that are not defined, causing linker errors when flameletSimpleFoam links against
-  libflameletThermophysicalModels.so.
+Historical note: this file belonged to the OpenFOAM 13 port.
+See ../../OF14_PORT_NOTES.md at the repository root for the OpenFOAM 14 changes.

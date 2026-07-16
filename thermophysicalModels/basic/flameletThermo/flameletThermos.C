@@ -11,15 +11,17 @@
 #include "pureMixture.H"
 
 #include "forGases.H"
-#include "makeThermo.H"
+#include "makeFluidThermo.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    // OpenFOAM 13 makeThermo uses BaseThermo::DerivedThermoType, so
-    // pdfFlameletThermo is selected through flameletThermo::DerivedThermoType.
-    forGases(makeThermo, flameletThermo, pureMixture);
+    // OpenFOAM 14 fluid thermos must be registered in the basicThermo,
+    // fluidThermo and flameletThermo run-time selection tables.
+    // pdfFlameletThermo is selected through
+    // flameletThermo::DerivedThermoType.
+    forGases(makeFluidThermo, flameletThermo, pureMixture);
 }
 
 // ************************************************************************* //
